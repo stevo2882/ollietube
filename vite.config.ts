@@ -9,7 +9,21 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
     coverage: {
-      reporter: ['text', 'html'],
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov'],
+      thresholds: {
+        lines: 70,
+        functions: 70,
+        branches: 60,
+        statements: 70,
+      },
+      exclude: [
+        'node_modules/**',
+        'src/test/**',
+        'server/**',
+        '*.config.*',
+        'src/main.tsx',
+      ],
     },
   },
 })
