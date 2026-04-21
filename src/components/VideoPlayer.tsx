@@ -118,9 +118,9 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playing, muted])
 
-  const progress = duration ? (currentTime / duration) * 100 : 0
   const volumeIcon = muted || volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊'
 
   return (

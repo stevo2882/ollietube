@@ -23,6 +23,7 @@ export default function Watch() {
       addToHistory(video)
       incrementViews()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [video?.id])
 
   if (loading) return (
