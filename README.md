@@ -1,73 +1,81 @@
-# React + TypeScript + Vite
+# OllieTube 🎬
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A YouTube-style local video player built with React, Vite, TypeScript, and Tailwind CSS. Drop your own video files in and get a fully featured media browser with search, watch history, likes, view counts, and editable metadata.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 📁 Auto-detects video files from a local directory
+- 🔍 Search by title or channel
+- 🎬 Custom video player with keyboard shortcuts
+- 👍 Like button and view count (persisted locally)
+- 🕑 Watch history in the sidebar
+- ✎ Editable video titles and descriptions
+- 📺 Related videos sidebar on the watch page
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [Node.js](https://nodejs.org) v20 or higher
+- npm v9 or higher
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**1. Clone the repo:**
+```bash
+git clone https://github.com/stevo2882/ollietube.git
+cd ollietube
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**2. Install dependencies:**
+```bash
+npm install
 ```
+
+**3. Add your videos:**
+
+Drop any `.mp4`, `.mov`, `.webm`, or `.mkv` files into the `public/videos/` directory.
+
+**4. Start the app:**
+```bash
+npm run dev:all
+```
+
+This starts both the Vite dev server and the Express API server concurrently.
+
+| Service | URL |
+|---|---|
+| App | http://localhost:5173 |
+| API | http://localhost:3001 |
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## Keyboard Shortcuts
+
+| Key | Action |
+|---|---|
+| `Space` | Play / Pause |
+| `→` | Skip forward 5s |
+| `←` | Skip back 5s |
+| `M` | Toggle mute |
+| `F` | Toggle fullscreen |
+
+## Project Structure
+
+```
+ollietube/
+├── public/
+│   └── videos/        ← drop your video files here
+├── server/
+│   └── index.ts       ← Express API that scans the videos directory
+└── src/
+    ├── components/    ← Navbar, Sidebar, VideoCard, VideoPlayer, etc.
+    ├── hooks/         ← useVideos, useWatchHistory, useVideoStats, useVideoMetadata
+    ├── pages/         ← Home, Watch
+    └── types/         ← Video interface
+```
+
+## Tech Stack
+
+- [React](https://react.dev) + [Vite](https://vitejs.dev) + TypeScript
+- [Tailwind CSS v4](https://tailwindcss.com)
+- [React Router v6](https://reactrouter.com)
+- [Express](https://expressjs.com) (local API server)
