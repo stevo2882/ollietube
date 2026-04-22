@@ -63,13 +63,23 @@ jobs:
         run: npx playwright install --with-deps chromium firefox
 
       - name: Start API server
-        run: npm run server &
+        run: |
+          npm run server > /tmp/server.log 2>&1 &
+          echo "Server PID: $!"
 
       - name: Start Vite dev server
-        run: npm run dev &
+        run: |
+          npm run dev > /tmp/vite.log 2>&1 &
+          echo "Vite PID: $!"
 
       - name: Wait for servers
-        run: npx wait-on http://localhost:5173 http://localhost:3001 --timeout 60000
+        run: |
+          sleep 15
+          echo "=== Server log ==="
+          cat /tmp/server.log
+          echo "=== Vite log ==="
+          cat /tmp/vite.log
+          npx wait-on http://localhost:5173 http://localhost:3001 --timeout 60000
 
       - name: Run E2E tests
         run: npm run e2e
