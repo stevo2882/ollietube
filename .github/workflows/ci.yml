@@ -74,12 +74,7 @@ jobs:
 
       - name: Wait for servers
         run: |
-          sleep 15
-          echo "=== Server log ==="
-          cat /tmp/server.log
-          echo "=== Vite log ==="
-          cat /tmp/vite.log
-          npx wait-on http://localhost:5173 http://localhost:3001 --timeout 60000
+          npx wait-on http://localhost:5173 http://localhost:3001/health --timeout 60000
 
       - name: Run E2E tests
         run: npm run e2e

@@ -29,6 +29,10 @@ function fileNameToTitle(filename: string): string {
     .replace(/\b\w/g, (c) => c.toUpperCase()) // title case
 }
 
+app.get('/health', (req, res) => {
+  res.json({ ok: true })
+})
+
 app.get('/api/videos', (req, res) => {
   const files = fs.readdirSync(VIDEOS_DIR).filter((f) =>
     ['.mp4', '.mov', '.webm', '.mkv'].includes(path.extname(f).toLowerCase())
