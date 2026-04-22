@@ -62,12 +62,14 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox
 
-      - name: Start servers
-        run: npm run dev:all &
+      - name: Start API server
+        run: npm run server &
+
+      - name: Start Vite dev server
+        run: npm run dev &
 
       - name: Wait for servers
-        run: |
-          npx wait-on http://localhost:5173 http://localhost:3001 --timeout 30000
+        run: npx wait-on http://localhost:5173 http://localhost:3001 --timeout 60000
 
       - name: Run E2E tests
         run: npm run e2e
