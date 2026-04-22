@@ -1,4 +1,5 @@
 import VideoCard from '../components/VideoCard'
+import VideoCardSkeleton from '../components/VideoCardSkeleton'
 import { useVideos } from '../hooks/useVideos'
 
 interface HomeProps {
@@ -13,22 +14,24 @@ export default function Home({ query }: HomeProps) {
     v.channel.toLowerCase().includes(query.toLowerCase())
   )
 
-  if (loading) return (
-    <main className="ml-52 pt-12 px-6 py-6">
-      <p className="text-[#aaa] text-sm mt-10 text-center">Loading videos...</p>
-    </main>
-  )
-
   if (error) return (
-    <main className="ml-52 pt-12 px-6 py-6">
+    <main className="ml-0 md:ml-52 pt-12 px-6 py-6">
       <p className="text-red-500 text-sm mt-10 text-center">{error}</p>
     </main>
   )
 
   return (
     <main className="ml-0 md:ml-52 pt-12 px-6 py-6">
-      {filtered.length === 0 ? (
-        <p className="text-[#aaa] text-sm mt-10 text-center">No results for "{query}"</p>
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <VideoCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
+        <p className="text-[#aaa] text-sm mt-10 text-center">
+          No results for "{query}"
+        </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((video) => (

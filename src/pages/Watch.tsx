@@ -26,11 +26,30 @@ export default function Watch() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [video?.id])
 
-  if (loading) return (
-    <main className="ml-0 md:ml-52 pt-12 px-6 py-6">
-      <p className="text-[#aaa] text-sm">Loading...</p>
-    </main>
-  )
+ if (loading) return (
+  <main className="ml-0 md:ml-52 pt-12 px-6 py-6">
+    <div className="flex gap-6 flex-col lg:flex-row animate-pulse">
+      <div className="flex-1 min-w-0">
+        <div className="w-full aspect-video rounded-xl bg-[#272727]" />
+        <div className="mt-4 flex flex-col gap-3">
+          <div className="h-4 bg-[#272727] rounded w-3/4" />
+          <div className="h-3 bg-[#272727] rounded w-1/4" />
+        </div>
+      </div>
+      <div className="w-full lg:w-72 flex flex-col gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="flex gap-2">
+            <div className="w-40 aspect-video rounded-lg bg-[#272727] flex-shrink-0" />
+            <div className="flex-1 flex flex-col gap-2 pt-1">
+              <div className="h-3 bg-[#272727] rounded w-full" />
+              <div className="h-3 bg-[#272727] rounded w-2/3" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </main>
+)
 
   if (!video) return (
     <main className="ml-0 md:ml-52 pt-12 px-6 py-6 text-center text-[#aaa]">
