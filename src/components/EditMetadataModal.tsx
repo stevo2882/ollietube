@@ -32,8 +32,9 @@ export default function EditMetadataModal({ video, onClose }: Props) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-[#aaa]">Title</label>
+          <label htmlFor="video-title" className="text-xs text-[#aaa]">Title</label>
           <input
+            id="video-title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -42,8 +43,9 @@ export default function EditMetadataModal({ video, onClose }: Props) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-[#aaa]">Description</label>
+          <label htmlFor="video-description" className="text-xs text-[#aaa]">Description</label>
           <textarea
+            id="video-description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={4}
