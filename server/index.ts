@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import fs from 'fs'
 import path from 'path'
+import { execSync } from 'child_process'
 
 const app = express()
 app.use(cors())
@@ -12,7 +13,6 @@ function formatDate(date: Date): string {
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-
   if (diffDays === 0) return 'Today'
   if (diffDays === 1) return 'Yesterday'
   if (diffDays < 7) return `${diffDays} days ago`
@@ -24,9 +24,25 @@ function formatDate(date: Date): string {
 
 function fileNameToTitle(filename: string): string {
   return filename
-    .replace(/\.[^/.]+$/, '')       // remove extension
-    .replace(/[-_]/g, ' ')          // replace dashes and underscores with spaces
-    .replace(/\b\w/g, (c) => c.toUpperCase()) // title case
+    .replace(/\.[^/.]+$/, '')
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+function getVideoDuration(filePath: string): string {
+  try {
+    const output = execSync(
+      `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${filePath}"`,
+      { encoding: 'utf8' }
+    ).trim()
+    const seconds = parseFloat(output)
+    if (isNaN(seconds)) return ''
+    const m = Math.floor(seconds / 60)
+    const s = Math.floor(seconds % 60)
+    return `${m}:${s.toString().padStart(2, '0')}`
+  } catch {
+    return ''
+  }
 }
 
 app.get('/health', (req, res) => {
@@ -39,7 +55,8 @@ app.get('/api/videos', (req, res) => {
   )
 
   const videos = files.map((file, index) => {
-    const fileStat = fs.statSync(path.join(VIDEOS_DIR, file))
+    const fullPath = path.join(VIDEOS_DIR, file)
+    const fileStat = fs.statSync(fullPath)
     return {
       id: String(index + 1),
       title: fileNameToTitle(file),
@@ -48,7 +65,7 @@ app.get('/api/videos', (req, res) => {
       filePath: `/videos/${file}`,
       uploadedAt: formatDate(fileStat.birthtime),
       views: '0 views',
-      duration: '',
+      duration: getVideoDuration(fullPath),
     }
   })
 
