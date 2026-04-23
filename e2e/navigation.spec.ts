@@ -2,9 +2,9 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Navigation', () => {
   test('direct URL to watch page works', async ({ page }) => {
-    // Go home first to find a real video id
     await page.goto('/')
     await expect(page.locator('.grid > div').first()).toBeVisible({ timeout: 10000 })
+    await expect(page.locator('.grid img').first()).toBeVisible({ timeout: 15000 })
     await page.locator('.grid > div').first().click()
     await expect(page.locator('h1')).toBeVisible({ timeout: 10000 })
   })
@@ -17,6 +17,7 @@ test.describe('Navigation', () => {
   test('edit modal opens and closes', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('.grid > div').first()).toBeVisible({ timeout: 10000 })
+    await expect(page.locator('.grid img').first()).toBeVisible({ timeout: 15000 })
     await page.locator('.grid > div').first().click()
     await expect(page.locator('h1')).toBeVisible({ timeout: 10000 })
     await page.getByText('✎ Edit').click()
@@ -28,6 +29,7 @@ test.describe('Navigation', () => {
   test('edit modal saves new title', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('.grid > div').first()).toBeVisible({ timeout: 10000 })
+    await expect(page.locator('.grid img').first()).toBeVisible({ timeout: 15000 })
     await page.locator('.grid > div').first().click()
     await expect(page.locator('h1')).toBeVisible({ timeout: 10000 })
     await page.getByText('✎ Edit').click()
