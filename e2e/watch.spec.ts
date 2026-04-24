@@ -1,25 +1,16 @@
-import { test, expect, type Page } from '@playwright/test'
-
-async function gotoWatch(page: Page) {
-  await page.locator('.grid > div').first().click()
-  await expect(page).toHaveURL(/\/watch\/\d+/, { timeout: 10000 })
-  await expect(page.locator('h1')).toBeVisible({ timeout: 10000 })
-}
+import { test, expect } from '@playwright/test'
+import { gotoWatch } from './helpers'
 
 test.describe('Watch page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
-    // Wait for grid and for at least one thumbnail to finish loading
-    await expect(page.locator('.grid > div').first()).toBeVisible({ timeout: 10000 })
-    await expect(page.locator('.grid img').first()).toBeVisible({ timeout: 15000 })
   })
 
   test('clicking a video card navigates to watch page', async ({ page }) => {
-    await page.locator('.grid > div').first().click()
-    await expect(page).toHaveURL(/\/watch\/\d+/, { timeout: 10000 })
+    await gotoWatch(page)
+    await expect(page).toHaveURL(/\/watch\/\d+/)
   })
 
-  // ... rest of tests unchanged, replace click + wait pattern with gotoWatch
   test('watch page shows video title', async ({ page }) => {
     await gotoWatch(page)
     const title = await page.locator('h1').textContent()
@@ -44,6 +35,20 @@ test.describe('Watch page', () => {
     await expect(likeBtn).toContainText('1')
   })
 
+  test('like button decrements when unliked', async ({ page }) => {
+    await gotoWatch(page)
+    const likeBtn = page.locator('button', { hasText: '👍' })
+    await likeBtn.click()
+    await expect(likeBtn).toContainText('1')
+    await likeBtn.click()
+    await expect(likeBtn).toContainText('0')
+  })
+
+  test('view count increments on visit', async ({ page }) => {
+    await gotoWatch(page)
+    await expect(page.getByText(/1 views/)).toBeVisible()
+  })
+
   test('back to home button navigates home', async ({ page }) => {
     await gotoWatch(page)
     await page.getByText('← Back to home').click()
@@ -54,5 +59,25 @@ test.describe('Watch page', () => {
     await gotoWatch(page)
     await page.goto('/')
     await expect(page.getByText('History')).toBeVisible({ timeout: 5000 })
+  })
+
+  test('related video click navigates to that video', async ({ page }) => {
+    await gotoWatch(page)
+    const firstRelated = page.locator('[class*="lg:w-72"] > div').first()
+    await expect(firstRelated).toBeVisible({ timeout: 10000 })
+    const currentUrl = page.url()
+    await firstRelated.click({ force: true })
+    await expect(page).toHaveURL(/\/watch\/\d+/, { timeout: 10000 })
+    await expect(page.locator('h1')).toBeVisible({ timeout: 10000 })
+    expect(page.url()).not.toBe(currentUrl)
+  })
+
+  test('edit modal saves description', async ({ page }) => {
+    await gotoWatch(page)
+    await page.getByText('✎ Edit').click()
+    await expect(page.getByText('Edit video info')).toBeVisible()
+    await page.getByLabel('Description').fill('A test description')
+    await page.getByText('Save').click()
+    await expect(page.getByText('A test description')).toBeVisible({ timeout: 5000 })
   })
 })
