@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { waitForVideoGrid, gotoWatch } from './helpers'
+import { gotoWatch } from './helpers'
 
 test.describe('Navigation', () => {
   test('direct URL to watch page works', async ({ page }) => {
