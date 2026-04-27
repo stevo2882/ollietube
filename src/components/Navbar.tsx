@@ -1,15 +1,22 @@
+import { useNavigate } from 'react-router-dom'
+
 interface NavbarProps {
   query: string
   onQueryChange: (value: string) => void
 }
 
 export default function Navbar({ query, onQueryChange }: NavbarProps) {
+  const navigate = useNavigate()
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 h-12 bg-[#0f0f0f] border-b border-[#272727]">
-      <div className="flex items-center gap-2 text-sm font-bold text-white whitespace-nowrap">
+      <button
+        onClick={() => navigate('/')}
+        className="flex items-center gap-2 text-sm font-bold text-white whitespace-nowrap hover:opacity-80 transition-opacity"
+      >
         <div className="w-5 h-5 bg-red-600 rounded flex items-center justify-center text-[10px]">▶</div>
         OllieTube
-      </div>
+      </button>
       <div className="flex flex-1 max-w-md mx-6">
         <input
           type="text"
