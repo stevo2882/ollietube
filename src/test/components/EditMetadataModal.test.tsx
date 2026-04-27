@@ -74,13 +74,8 @@ describe('EditMetadataModal', () => {
     expect(textarea).toHaveValue('New description')
   })
 
-  it('calls saveMetadata and onClose when save is clicked', async () => {
-    const saveMetadata = vi.fn()
+  it('calls onClose when save is clicked', async () => {
     const onClose = vi.fn()
-    vi.mocked(vi.importMock('../../hooks/useVideoMetadata')).useVideoMetadata = () => ({
-      saveMetadata,
-      getMetadata: vi.fn().mockReturnValue({}),
-    })
     render(<EditMetadataModal video={mockVideo} onClose={onClose} />)
     await userEvent.click(screen.getByText('Save'))
     expect(onClose).toHaveBeenCalledTimes(1)
